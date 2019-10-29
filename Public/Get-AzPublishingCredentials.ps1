@@ -11,7 +11,7 @@ function Get-AzPublishingCredentials {
         $ApiVersion = '2018-02-01',
 
         [switch]
-        $AsBase64EncodedString
+        $AsObject
     )
 
     $invokeAzResourceActionSplat = @{
@@ -23,17 +23,17 @@ function Get-AzPublishingCredentials {
     }
 
     $publishingCreds = Invoke-AzResourceAction @invokeAzResourceActionSplat -Force |
-    Select-Object -ExpandProperty Properties |
-    Select-Object publishingUserName, publishingPassword
+        Select-Object -ExpandProperty Properties |
+            Select-Object publishingUserName, publishingPassword
     
-    if ($AsBase64EncodedString) {
+    if ($AsObject) {
+        $publishingCreds
+    }
+    else {
         [System.Convert]::ToBase64String(
             [System.Text.Encoding]::ASCII.GetBytes(
                 ("{0}:{1}" -f $publishingCreds.publishingUserName, $publishingCreds.publishingPassword)
             )
         )
-    }
-    else {
-        $publishingCreds
     }
 }
