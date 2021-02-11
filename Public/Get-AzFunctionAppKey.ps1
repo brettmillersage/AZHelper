@@ -16,8 +16,8 @@ function Get-AzFunctionAppKey {
         Headers = @{
             Authorization = "Bearer {0}" -f $Token
         }
-        Uri     = 'https://{0}.azurewebsites.net/admin/functions/{1}/keys' -f $FunctionAppName, $FunctionName
+        Uri     = 'https://{0}.azurewebsites.net/admin/functions/{1}' -f $FunctionAppName, $FunctionName
     }
 
-    Invoke-RestMethod @invokeRestMethodSplat | Select-Object -ExpandProperty keys
+    Invoke-RestMethod @invokeRestMethodSplat #| Select-Object -ExpandProperty keys
 }
